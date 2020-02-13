@@ -1,3 +1,5 @@
+let solution _ = "This is the solution"
+
 (*Question 1*)
 let rec findNthElement ((l : 'a list), (n : int)) : 'a option = 
 	if n >= 0 then

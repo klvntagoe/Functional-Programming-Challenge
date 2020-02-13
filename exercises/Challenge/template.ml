@@ -1,3 +1,6 @@
+let solution =
+  "Replace this string with your implementation." ;;
+
 (*QUESTIONS*)
 let rec findNthElement ((l : 'a list), (n : int)) : 'a option = 
 	raise NotImplemented
