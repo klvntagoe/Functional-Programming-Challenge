@@ -1,0 +1,17 @@
+{
+    "learnocaml_version" : "2",
+    "groups" : {
+        "demo": {
+            "title": "Practice Excercise",
+            "exercises": [
+                "demo"
+            ]
+        },
+        "Challenge" : {
+            "title" : "McGill Tech Games Functional Programming Challenge",
+            "exercises" : [
+                "Challenge"
+            ]
+        }
+    }
+}
