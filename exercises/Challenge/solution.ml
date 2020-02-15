@@ -1,6 +1,8 @@
 let solution _ = "This is the solution"
 
-(*Question 1*)
+let identity x = x
+;;
+
 let rec findNthElement ((l : 'a list), (n : int)) : 'a option = 
 	if n >= 0 then
 		match l with
@@ -9,7 +11,6 @@ let rec findNthElement ((l : 'a list), (n : int)) : 'a option =
 	else None
 ;;
 
-(*Question 2*)
 let rec enumerateKCombinations ((l : 'a list), (k : int)) : 'a list list =
 	if k <= 0 then [[]]
 	else 
@@ -23,7 +24,6 @@ let rec enumerateKCombinations ((l : 'a list), (k : int)) : 'a list list =
 		end
 ;;
 
-(*Question 3*)
 let rec countNodes (t : 'a tree) : int = 
 	let Node (value, children) = t in
 	match children with
@@ -31,7 +31,6 @@ let rec countNodes (t : 'a tree) : int =
 		| _ -> List.fold_left (fun acc t' -> acc + countNodes t') 1 children
 ;;
 
-(*Question 4*)
 let findNode ((p : 'a -> bool), (t : 'a tree)) : 'a option =
 	let rec find_e (p : 'a -> bool) (t : 'a tree) : 'a = match t with
 	|Node (a, l)-> 
@@ -43,7 +42,6 @@ let findNode ((p : 'a -> bool), (t : 'a tree)) : 'a option =
 	try ( Some (find_e p t) ) with NotFound -> None
 ;;
 
-(*Question 5*)
 let fib max = 
 	unfold 
 		(fun (a,b) -> a, (b, a+b)) 
@@ -51,7 +49,6 @@ let fib max =
 		(1,1)
 ;;
 
-(*Question 6*)
 let pascal max = 
 	unfold
 		(fun r -> 
