@@ -1,23 +1,58 @@
 open Test_lib
 open Report
 
-(*TYPE DEFINITIONS*)
-type 'a tree = Node of 'a * ('a tree) list
+(*TYPE DEFINITIONS
+type 'a tree = Node of 'a * ('a tree) list*)
 
 (*EXPRESSION DEFINITIONS*)
 let l5 = [0; 1; 2; 3; 4; 5]
 let l10 = [0; 1; 2; 3; 4; 5; 6; 7; 8; 9; 10]
+let tLeaf = Node (1, [])
+let tDeep = Node (1, [ Node (2, [ Node (3, [ Node (4, [Node (5, [])])])])])
+let tWide = Node (1, [ Node (2, [])
+                     ; Node (3, [])
+                     ; Node (4, [])
+                     ; Node (5, [])
+                     ])
 let t10 = Node (1, [ Node (2, [])
-                 ; Node (3, [ Node (4, [])
-                            ; Node (5, [])
-                            ; Node (6, [ Node (7, [])
-                                       ; Node (8, [])
-                                       ; Node (9, [])
-                                       ; Node (10, [])
-                                       ])
-                            ])
-                  ])
+                   ; Node (3, [ Node (4, [])
+                              ; Node (5, [])
+                              ; Node (6, [ Node (7, [])
+                                         ; Node (8, [])
+                                         ; Node (9, [])
+                                         ; Node (10, [])
+                                         ])
+                              ])
+                   ])
 
+(*SAMPLER DEFINITIONS*)
+(*let rec sample_tree ((sample: unit -> 'a), (maxHeightandWidth: int)): unit -> 'a tree = 
+  fun () ->*)
+let rec sample_tree (sample: unit -> 'a) (maxHeightandWidth: int) ():'a tree = 
+  let rec buildChildren n = 
+    if n <= 0 then 
+      []
+    else 
+      (sample_tree sample (maxHeightandWidth-1) ())::(buildChildren (n-1))
+  in
+  begin
+    if maxHeightandWidth <= 1 then 
+      Node(sample(), [])
+    else 
+      (*
+      let tree_sampler = sample_tree sample (maxHeightandWidth-1) in
+      let children = sample_list 
+                      ~min_size: 0
+                      ~max_size: maxHeightandWidth
+                      ~dups: false
+                      ~sorted: false
+                      tree_sampler
+      in
+      *)
+      let children = buildChildren (Random.int (maxHeightandWidth+1)) in
+      Node(sample(), children)
+  end
+  
 (*TESTING FUNCTIONS*)
 let test_identity () = 
   begin
@@ -46,10 +81,10 @@ let test_identity () =
       ["hello world"]
     @
     test_function_1_against_solution
-      [%ty: int list -> int list]
+      [%ty: bool -> bool]
       "identity"
       ~gen:0
-      [[1; 2; 3; 4; 5]]
+      [true]
   end
 
 let test_findNthElement () = 
@@ -73,12 +108,31 @@ let test_enumerateKCombinations () =
 
 let test_countNodes () = 
   begin
-    []
+    test_function_1_against_solution
+      [%ty: int tree -> int]
+      "countNodes"
+      ~sampler:(sample_tree sample_int 5)
+      ~gen:10
+      []
   end
 
 let test_findNode () = 
   begin
-    []
+    test_function_1_against_solution
+      [%ty: ((int -> bool) * int tree) -> int option]
+      "findNode"
+      ~gen:0
+      [ ((fun x -> x = 0), tLeaf)
+      ; ((fun x -> x = 1), tLeaf)
+      ; ((fun x -> x = 0), tDeep)
+      ; ((fun x -> x = 1), tDeep)
+      ; ((fun x -> x = 5), tDeep)
+      ; ((fun x -> x = 0), tWide)
+      ; ((fun x -> x = 1), tWide)
+      ; ((fun x -> x = 5), tWide)
+      ; ((fun x -> x = 5), t10)
+      ; ((fun x -> x = 10), t10)
+      ]
   end
 
 let test_fib () = 
@@ -114,6 +168,12 @@ let () =
     Section
       ([ Text "Function" ; Code "enumerateKCombinations" ],
       test_enumerateKCombinations());
+    Section
+      ([ Text "Function" ; Code "countNodes" ],
+      test_countNodes());
+    Section
+      ([ Text "Function" ; Code "findNode" ],
+      test_findNode());
     Section
       ([ Text "Function" ; Code "fib" ],
       test_fib());
