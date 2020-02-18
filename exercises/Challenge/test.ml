@@ -87,12 +87,59 @@ let test_identity () =
       [true]
   end
 
+let test_append () = 
+  begin
+    test_function_2_against_solution
+      [%ty: int list -> int list -> int list]
+      "append"
+      ~gen:10
+      []
+  end
+
+let test_reverse () = 
+  begin
+    test_function_1_against_solution
+      [%ty: int list -> int list]
+      "reverse"
+      ~gen:10
+      []
+  end
+
 let test_findNthElement () = 
   begin
     test_function_1_against_solution
       [%ty: (int list * int) -> int option]
       "findNthElement"
-      ~gen:10
+      ~gen:15
+      []
+  end
+
+let test_replicateSomeElements () = 
+  begin
+    test_function_1_against_solution
+      [%ty: ((int -> bool) * int list * int) -> int list ]
+      "replicateSomeElements"
+      ~sampler: 
+        (fun () -> 
+          begin
+            (fun x -> x mod 2 = 0),
+            (sample_list ~max_size: 10 sample_int) (),
+            1 + Random.int 5
+          end)
+      ~gen:5
+      []
+    @
+    test_function_1_against_solution
+      [%ty: ((int -> bool) * int list * int) -> int list ]
+      "replicateSomeElements"
+      ~sampler: 
+        (fun () -> 
+          begin
+            (fun x -> x mod 2 <> 0),
+            (sample_list ~max_size: 10 sample_int) (),
+            1 + Random.int 5
+          end)
+      ~gen:5
       []
   end
 
@@ -112,7 +159,7 @@ let test_countNodes () =
       [%ty: int tree -> int]
       "countNodes"
       ~sampler:(sample_tree sample_int 5)
-      ~gen:10
+      ~gen:15
       []
   end
 
@@ -140,8 +187,9 @@ let test_fib () =
     test_function_1_against_solution
       [%ty: int -> int list]
       "fib"
-      ~gen:0
-      [0;2;8;32;64;256]
+      ~sampler: (fun () -> Random.int 10000)
+      ~gen:10
+      []
   end
 
 let test_pascal () = 
@@ -149,8 +197,9 @@ let test_pascal () =
     test_function_1_against_solution
       [%ty: int -> int list list]
       "pascal"
-      ~gen:0
-      [0;2;4;6]
+      ~sampler: (fun () -> Random.int 21)
+      ~gen:5
+      []
   end
 
 
@@ -163,8 +212,17 @@ let () =
       ([ Text "Function" ; Code "identity" ],
         test_identity());
     Section
+      ([ Text "Function" ; Code "append" ],
+        test_append());
+    Section
+      ([ Text "Function" ; Code "reverse" ],
+      test_reverse());
+    Section
       ([ Text "Function" ; Code "findNthElement" ],
         test_findNthElement());
+    Section
+      ([ Text "Function" ; Code "replicateSomeElements" ],
+      test_replicateSomeElements());
     Section
       ([ Text "Function" ; Code "enumerateKCombinations" ],
       test_enumerateKCombinations());

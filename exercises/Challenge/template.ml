@@ -3,7 +3,19 @@ let identity x =
 	raise NotImplemented
 ;;
 
+let rec append (l1 : 'a list) (l2 : 'a list) : 'a list = 
+	raise NotImplemented
+;;
+
+let rec reverse (l : 'a list) : 'a list = 
+	raise NotImplemented
+;;
+
 let rec findNthElement ((l : 'a list), (n : int)) : 'a option = 
+	raise NotImplemented
+;;
+
+let rec replicateSomeElements ((p : 'a -> bool), (l : 'a list), (k : int)) : 'a list = 
 	raise NotImplemented
 ;;
 
