@@ -1,5 +1,11 @@
 # Compete McGill Tech Games Functional Programming Challenge
-1. Clone learn-ocaml repo
+## Requirements:
+* [OCaml](https://ocaml.org/docs/install.html) with version of at least 4.05
+* [Opam](https://opam.ocaml.org/doc/Install.html) with version of at least 2.0 (OCaml package manager)
+* [Docker](https://www.docker.com/products/docker-desktop)
+
+## Instructions (to serve on localhost):
+1. Clone [learn-ocaml](https://github.com/ocaml-sf/learn-ocaml) repo
 2. Clone this repo inside your learn-ocaml directory
 3. To run:
 ```bash
