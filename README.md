@@ -1,4 +1,4 @@
-# Compete McGill Tech Games Functional Programming Challenge
+# Compete McGill Tech Games 2020 Functional Programming Challenge
 ## Requirements:
 * [OCaml](https://ocaml.org/docs/install.html) with version of at least 4.05
 * [Opam](https://opam.ocaml.org/doc/Install.html) with version of at least 2.0 (OCaml package manager)
